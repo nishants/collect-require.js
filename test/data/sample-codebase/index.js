@@ -1,0 +1,1 @@
+module.exports = function(){return "returned from index.js";};
