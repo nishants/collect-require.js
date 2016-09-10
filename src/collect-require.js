@@ -28,10 +28,12 @@ module.exports = {
         },
         standalone = {
           scripts       : collected,
-          run : function (path) {
+          run : function (script) {
             var module  = {exports: null},
-                require = function (requirePath) {return standalone.run(resolveRequire(path, requirePath));};
-            eval(this.scripts[path]);
+                require = function (requiredPath) {
+                  return standalone.run(resolveRequire(script, requiredPath));
+                };
+            eval(this.scripts[script]);
             return module.exports;
           }
         };

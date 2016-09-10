@@ -1,4 +1,4 @@
-var two = require("./two/script-two");
+var two = require("./../two/script-two");
 module.exports = function(){
   return two;
 };
