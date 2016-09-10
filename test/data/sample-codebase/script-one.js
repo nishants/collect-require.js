@@ -1,1 +1,4 @@
-module.exports = "from script one";
+var two = require("./two/script-two");
+module.exports = function(){
+  return two;
+};

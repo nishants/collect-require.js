@@ -1,2 +1,6 @@
 var one = require("./script-one");
-module.exports = function(){return one;};
+module.exports = {
+  get : function(){
+    return one();;
+  }
+};
