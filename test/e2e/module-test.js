@@ -4,10 +4,13 @@ var expect      = require('chai').expect,
 
 describe('Create Standalone Script', function() {
 
-  it('should combile script files', function () {
-    var expected = "module.exports = \"from script one\";module.exports = \"from script two\";",
+  it('should combine script files', function () {
+    var expected = {
+          "script-one"      : "module.exports = \"from script one\";",
+          "two/script-two"  : "module.exports = \"from script two\";"
+        },
         actual   = collector.collect(helper.codebasePath);
 
-    expect(expected).to.equal(actual);
+    expect(JSON.stringify(actual)).to.equal(JSON.stringify(expected));
   });
 });
