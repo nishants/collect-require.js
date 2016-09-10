@@ -4,7 +4,7 @@ var expect      = require('chai').expect,
 
 describe('Create Standalone Script', function() {
 
-  it('should combine script files', function () {
+  it('should collect script files', function () {
     var expected = {
           "script-one"      : "module.exports = \"from script one\";",
           "two/script-two"  : "module.exports = \"from script two\";"

@@ -6,18 +6,12 @@ module.exports = {
   collect: function (baseDir, exclude) {
 
     var ifJSFile      = function (file) {return file.endsWith(".js");},
-        toFileContent = function (file) {
-          return {
-            name: file.replace(".js", ""),
-            content : fs.readFileSync(baseDir + "/" + file).toString('utf8')
-          };
-        },
-        scripts = wrench.readdirSyncRecursive(baseDir).filter(ifJSFile).map(toFileContent),
+        toFileContent = function (file) {return {name: file.replace(new RegExp(".js$"), ""), content : fs.readFileSync(baseDir + "/" + file).toString('utf8')};},
         collected = {};
 
-    scripts.forEach(function(script){
+    wrench.readdirSyncRecursive(baseDir).filter(ifJSFile).map(toFileContent).forEach(function(script){
       collected[script.name] = script.content;
-    });
+    })
 
     return collected;
   }
