@@ -1,1 +1,2 @@
-module.exports = function(){return "returned from index.js";};
+var one = require("./script-one");
+module.exports = function(){return one;};

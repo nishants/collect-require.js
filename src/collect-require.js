@@ -12,13 +12,19 @@ module.exports = {
       collected[script.name] = script.content;
     });
 
-    return {
-      scripts : collected,
-      run     : function(path){
-        var module = {exports : null};
+    var standalone = {
+      scripts       : collected,
+      resolveRequire: function(fromPath, requiredPath){
+        var path  = requiredPath.replace(new RegExp("^./"), "");
+        return standalone.run(path);
+      },
+      run : function (path) {
+        var module  = {exports: null},
+            require = function (requirePath) {return standalone.resolveRequire(path, requirePath);};
         eval(this.scripts[path]);
         return module.exports;
       }
     };
+    return standalone;
   }
 }

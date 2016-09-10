@@ -6,7 +6,7 @@ describe('Create Standalone Script', function() {
 
   it('should collect script files', function () {
     var expected = {
-          "index"           : "module.exports = function(){return \"returned from index.js\";};",
+          "index"           : "var one = require(\"./script-one\");\nmodule.exports = function(){return one;};",
           "script-one"      : "module.exports = \"from script one\";",
           "two/script-two"  : "module.exports = \"from script two\";"
         },
@@ -17,7 +17,6 @@ describe('Create Standalone Script', function() {
 
   it('should execute script files', function () {
     var standalone   = collector.collect(helper.codebasePath);
-
-    expect(standalone.run("index")()).to.equal("returned from index.js");
+    expect(standalone.run("index")()).to.equal("from script one");
   });
 });
