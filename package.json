@@ -2,7 +2,7 @@
   "name": "collect-require",
   "version": "1.0.0",
   "description": "collect require-js based codebase into a singel js file ",
-  "main": "collect-require.js",
+  "main": "src/collect-require.js",
   "scripts": {
     "test": "test"
   },
@@ -22,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/nishants/collect-require.js/issues"
   },
-  "homepage": "https://github.com/nishants/collect-require.js#readme"
+  "homepage": "https://github.com/nishants/collect-require.js#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "wrench": "^1.5.9"
+  }
 }
