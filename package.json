@@ -1,0 +1,26 @@
+{
+  "name": "collect-require",
+  "version": "1.0.0",
+  "description": "collect require-js based codebase into a singel js file ",
+  "main": "collect-require.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nishants/collect-require.js.git"
+  },
+  "keywords": [
+    "collect-require",
+    "collect-require.js",
+    "require.js",
+    "browserify",
+    "standalone"
+  ],
+  "author": "nishants",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/nishants/collect-require.js/issues"
+  },
+  "homepage": "https://github.com/nishants/collect-require.js#readme"
+}
