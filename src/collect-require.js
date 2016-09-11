@@ -1,6 +1,14 @@
 var
-    wrench  = require("wrench"),
-    fs      = require("fs");
+    wrench            = require("wrench"),
+    fs                = require("fs"),
+
+    adapterScript     = "src/adaptor-script.js",
+    wrapperScript     = "src/wrapper-script.js",
+
+    scriptPathPlaceholder     = "/*!<SCRIPT-PATH>!*/"
+    scriptPlaceholder         = "/*!<SCRIPT>!*/",
+    apiNamePlaceHolder        = "SCRIPT_COLLECTOR_API_NAME",
+    scriptMappingsPlaceholder = "/*!<SCRIPT-MAPPINGS>!*/";
 
 module.exports = {
   collect: function (baseDir, exclude) {
@@ -9,7 +17,7 @@ module.exports = {
         collected = {};
 
     wrench.readdirSyncRecursive(baseDir).filter(ifJSFile).map(toFileContent).forEach(function(script){
-      collected[script.name] = script.content;
+      collected[script.name] = fs.readFileSync(adapterScript).toString('utf8').replace(scriptPlaceholder, script.content).replace(scriptPathPlaceholder, script.name);
     });
 
     var
@@ -29,12 +37,17 @@ module.exports = {
         standalone = {
           scripts       : collected,
           run : function (script) {
-            var module  = {exports: null},
-                require = function (requiredPath) {
-                  return standalone.run(resolveRequire(script, requiredPath));
-                };
-            eval(this.scripts[script]);
-            return module.exports;
+            return eval(this.scripts[script]);
+          },
+          toScript: function(main,apiName){
+            var mappings = "";
+            for(var path in standalone.scripts){
+              mappings += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", standalone.scripts[path]);;
+            }
+            return fs.readFileSync(wrapperScript).toString('utf8').replace(scriptMappingsPlaceholder, mappings).replace("/*!<SCRIPT-MAIN>!*/", main.replace(".js", "")).replace(apiNamePlaceHolder, apiName);
+          },
+          saveTo: function(main, path, apiName){
+            return fs.writeFileSync(path, standalone.toScript(main, apiName));
           }
         };
     return standalone;

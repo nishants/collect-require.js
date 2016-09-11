@@ -29,4 +29,24 @@ describe('Create Standalone Script', function() {
     expect(actual).to.equal("from script three");
   });
 
+  it('should crate standalone script file', function () {
+    var path        = helper.aWritableFilePath(),
+        standalone  = collector.collect(helper.codebasePath);
+
+    standalone.saveTo("index", path, "Jeyson");
+    helper.evalScript(path);
+
+    expect(Jeyson.get()).to.equal("from script three");
+  });
+
+  it('should allow specifying entry file', function () {
+    var path        = helper.aWritableFilePath(),
+        standalone  = collector.collect(helper.codebasePath);
+
+    standalone.saveTo("two/script-two.js", path, "Jeyson");
+    helper.evalScript(path);
+
+    expect(Jeyson).to.equal("from script three");
+  });
+
 });
