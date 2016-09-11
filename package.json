@@ -1,6 +1,6 @@
 {
   "name": "collect-require",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "collect require-js based codebase into a singel js file ",
   "main": "src/collect-require.js",
   "scripts": {

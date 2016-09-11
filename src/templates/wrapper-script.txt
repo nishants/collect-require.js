@@ -19,5 +19,5 @@ var
         return standalone[path]();
       },
     };
-
-SCRIPT_COLLECTOR_API_NAME = standalone[main]();
+var global = GLOBAL || Window
+global.SCRIPT_COLLECTOR_API_NAME = standalone[main]();
