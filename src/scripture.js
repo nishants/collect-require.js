@@ -6,23 +6,22 @@ var
 
 module.exports = {
   create: function (scripts) {
-    var relations = "",
-        createScript = function (main, apiName) {
-          return fs.readFileSync(wrapperScript)
-              .toString('utf8')
-              .replace(scriptMappingsPlaceholder, relations)
-              .replace("/*!<SCRIPT-MAIN>!*/"    , main.replace(".js", ""))
-              .replace(apiNamePlaceHolder       , apiName);
-        };
+    var scriptMapping = "";
 
+    // create tuples of type "<name> : <value>, <name> : <value>,"
     for (var path in scripts) {
-      relations += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", scripts[path]);
+      scriptMapping += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", scripts[path]);
     }
 
     return {
       scripts : scripts,
       save: function(options){
-        return fs.writeFileSync(options.path, createScript(options.main, options.apiName));
+        return fs.writeFileSync(options.path,
+            fs.readFileSync(wrapperScript)
+            .toString('utf8')
+            .replace(scriptMappingsPlaceholder, scriptMapping)
+            .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
+            .replace(apiNamePlaceHolder       , options.apiName));
       }
     };
   }
