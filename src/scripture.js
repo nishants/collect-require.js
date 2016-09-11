@@ -8,7 +8,6 @@ module.exports = {
   create: function (scripts) {
     var scriptMapping = "";
 
-    // create tuples of type "<name> : <value>, <name> : <value>,"
     for (var path in scripts) {
       scriptMapping += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", scripts[path]);
     }
@@ -16,12 +15,14 @@ module.exports = {
     return {
       scripts : scripts,
       save: function(options){
-        return fs.writeFileSync(options.path,
+        return fs.writeFileSync(
+            options.path,
             fs.readFileSync(wrapperScript)
-            .toString('utf8')
-            .replace(scriptMappingsPlaceholder, scriptMapping)
-            .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
-            .replace(apiNamePlaceHolder       , options.apiName));
+              .toString('utf8')
+              .replace(scriptMappingsPlaceholder, scriptMapping)
+              .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
+              .replace(apiNamePlaceHolder       , options.apiName)
+        );
       }
     };
   }

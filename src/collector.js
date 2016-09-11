@@ -8,7 +8,7 @@ var
     scriptMappingsPlaceholder = "/*!<SCRIPT-MAPPINGS>!*/";
 
 module.exports = {
-  collect: function (baseDir, exclude) {
+  collect: function (baseDir) {
     var ifJSFile      = function (file) {return file.endsWith(".js");},
         toFileContent = function (file) {return {name: file.replace(new RegExp(".js$"), ""), content : fs.readFileSync(baseDir + "/" + file).toString('utf8')};},
         collected = {};
