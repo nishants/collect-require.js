@@ -1,7 +1,8 @@
+require("./require-template");
 var
     wrench                    = require("wrench"),
     fs                        = require("fs"),
-    adapterScript             = "src/templates/adaptor-script.js",
+    adapterScript             = require("./templates/adaptor-script.txt"),
     scriptPathPlaceholder     = "/*!<SCRIPT-PATH>!*/"
     scriptPlaceholder         = "/*!<SCRIPT>!*/",
     apiNamePlaceHolder        = "SCRIPT_COLLECTOR_API_NAME",
@@ -14,7 +15,7 @@ module.exports = {
         collected = {};
 
     wrench.readdirSyncRecursive(baseDir).filter(ifJSFile).map(toFileContent).forEach(function(script){
-      collected[script.name] = fs.readFileSync(adapterScript).toString('utf8').replace(scriptPlaceholder, script.content).replace(scriptPathPlaceholder, script.name);
+      collected[script.name] = adapterScript.replace(scriptPlaceholder, script.content).replace(scriptPathPlaceholder, script.name);
     });
 
     return collected;

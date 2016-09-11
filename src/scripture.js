@@ -1,6 +1,7 @@
+require("./require-template");
 var
     fs                        = require("fs"),
-    wrapperScript             = "src/templates/wrapper-script.js",
+    wrapperScript             = require("./templates/wrapper-script.txt"),
     apiNamePlaceHolder        = "SCRIPT_COLLECTOR_API_NAME",
     scriptMappingsPlaceholder = "/*!<SCRIPT-MAPPINGS>!*/";
 
@@ -17,11 +18,9 @@ module.exports = {
       save: function(options){
         return fs.writeFileSync(
             options.path,
-            fs.readFileSync(wrapperScript)
-              .toString('utf8')
-              .replace(scriptMappingsPlaceholder, scriptMapping)
-              .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
-              .replace(apiNamePlaceHolder       , options.apiName)
+            wrapperScript.replace(scriptMappingsPlaceholder, scriptMapping)
+                         .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
+                         .replace(apiNamePlaceHolder       , options.apiName)
         );
       }
     };
