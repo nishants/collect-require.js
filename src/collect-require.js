@@ -46,8 +46,8 @@ module.exports = {
             }
             return fs.readFileSync(wrapperScript).toString('utf8').replace(scriptMappingsPlaceholder, mappings).replace("/*!<SCRIPT-MAIN>!*/", main.replace(".js", "")).replace(apiNamePlaceHolder, apiName);
           },
-          saveTo: function(main, path, apiName){
-            return fs.writeFileSync(path, standalone.toScript(main, apiName));
+          save: function(options){
+            return fs.writeFileSync(options.path, standalone.toScript(options.main, options.apiName));
           }
         };
     return standalone;
