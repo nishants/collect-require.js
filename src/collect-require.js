@@ -20,36 +20,22 @@ module.exports = {
       collected[script.name] = fs.readFileSync(adapterScript).toString('utf8').replace(scriptPlaceholder, script.content).replace(scriptPathPlaceholder, script.name);
     });
 
-    var
-        parentOf = function(path){
-          path = path.split("/");
-          return path.slice(0, path.length-1).join("/");
-        },
-        resolveRequire=  function(fromPath, requiredPath){
-          var path  = requiredPath.replace(new RegExp("^./"), ""),
-              from  = parentOf(fromPath);
-          while(-1 != path.indexOf("../")){
-            path = path.replace("../", "");
-            from = parentOf(from);
-          }
-          return (from ? from + "/" : "") + path;
-        },
-        standalone = {
-          scripts       : collected,
-          run : function (script) {
-            return eval(this.scripts[script]);
-          },
-          toScript: function(main,apiName){
-            var mappings = "";
-            for(var path in standalone.scripts){
-              mappings += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", standalone.scripts[path]);;
-            }
-            return fs.readFileSync(wrapperScript).toString('utf8').replace(scriptMappingsPlaceholder, mappings).replace("/*!<SCRIPT-MAIN>!*/", main.replace(".js", "")).replace(apiNamePlaceHolder, apiName);
-          },
-          save: function(options){
-            return fs.writeFileSync(options.path, standalone.toScript(options.main, options.apiName));
-          }
-        };
+    standalone = {
+      scripts       : collected,
+      run : function (script) {
+        return eval(this.scripts[script]);
+      },
+      toScript: function(main,apiName){
+        var mappings = "";
+        for(var path in standalone.scripts){
+          mappings += "\"<relative-path>\" : function(){return <script-body>;},".replace("<relative-path>", path).replace("<script-body>", standalone.scripts[path]);;
+        }
+        return fs.readFileSync(wrapperScript).toString('utf8').replace(scriptMappingsPlaceholder, mappings).replace("/*!<SCRIPT-MAIN>!*/", main.replace(".js", "")).replace(apiNamePlaceHolder, apiName);
+      },
+      save: function(options){
+        return fs.writeFileSync(options.path, standalone.toScript(options.main, options.apiName));
+      }
+    };
     return standalone;
   }
 }

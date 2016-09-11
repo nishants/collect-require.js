@@ -17,16 +17,18 @@ describe('Create Standalone Script', function() {
     expect(actual).to.deep.equal(expected);
   });
 
-  it('should execute script files', function () {
-    var standalone  = collector.collect(helper.codebasePath),
-        index       = standalone.run("index");
-    expect(index.get()).to.equal("from script three");
-  });
 
   it('should support ../ in require', function () {
-    var standalone  = collector.collect(helper.codebasePath),
-        actual      = standalone.run("three/three.five/script-three.five");
-    expect(actual).to.equal("from script three");
+    var path        = helper.aWritableFilePath(),
+        standalone  = collector.collect(helper.codebasePath);
+
+    standalone.save({
+      path    : path,
+      main    : "three/three.five/script-three.five" ,
+      apiName : "Jeyson",
+    });
+
+    helper.evalScript(path);
   });
 
   it('should create standalone script file', function () {
