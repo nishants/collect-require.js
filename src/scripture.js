@@ -3,6 +3,7 @@ var
     fs                        = require("fs"),
     wrapperScript             = require("./templates/wrapper-script.txt"),
     apiNamePlaceHolder        = "SCRIPT_COLLECTOR_API_NAME",
+    globalHookPlaceHolder     = "GLOBAL_HOOK",
     scriptMappingsPlaceholder = "/*!<SCRIPT-MAPPINGS>!*/";
 
 module.exports = {
@@ -16,12 +17,18 @@ module.exports = {
     return {
       scripts : scripts,
       save: function(options){
-        return fs.writeFileSync(
-            options.path,
-            wrapperScript.replace(scriptMappingsPlaceholder, scriptMapping)
-                         .replace("/*!<SCRIPT-MAIN>!*/"    , options.main.replace(".js", ""))
-                         .replace(apiNamePlaceHolder       , options.apiName)
-        );
+        var script = wrapperScript.replace(scriptMappingsPlaceholder, scriptMapping)
+            .replace("/*!<SCRIPT-MAIN>!*/", options.main.replace(".js", ""))
+            .replace(apiNamePlaceHolder, options.apiName);
+
+        if(options.buildNashorn){
+          fs.writeFileSync(options.buildNashorn, script.replace(globalHookPlaceHolder, "GLOBAL"));
+        }
+
+        if(options.buildBrowser){
+          fs.writeFileSync(options.buildBrowser, script.replace(globalHookPlaceHolder, "window"));
+        }
+
       }
     };
   }

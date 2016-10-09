@@ -23,23 +23,40 @@ describe('Create Standalone Script', function() {
         standalone  = collector.collect(helper.codebasePath);
 
     standalone.save({
-      path    : path,
-      main    : "three/three.five/script-three.five" ,
-      apiName : "Jeyson",
+      buildNashorn : path,
+      main          : "three/three.five/script-three.five" ,
+      apiName       : "Jeyson",
     });
 
     helper.evalScript(path);
   });
 
-  it('should create standalone script file', function () {
+  it('should create standalone Nashorn script', function () {
     var path        = helper.aWritableFilePath(),
         standalone  = collector.collect(helper.codebasePath);
 
     standalone.save({
-      path    : path,
+      buildNashorn    : path,
       main    : "index.js" ,
       apiName : "Jeyson",
     });
+
+    helper.evalScript(path);
+
+    expect(Jeyson.get()).to.equal("from script three");
+  });
+
+  it('should create standalone Browser script', function () {
+    var path        = helper.aWritableFilePath(),
+        standalone  = collector.collect(helper.codebasePath);
+
+    standalone.save({
+      buildBrowser    : path,
+      main    : "index.js" ,
+      apiName : "Jeyson",
+    });
+
+    GLOBAL.window = GLOBAL;
 
     helper.evalScript(path);
 
@@ -52,7 +69,7 @@ describe('Create Standalone Script', function() {
 
 
     standalone.save({
-          path    : path,
+          buildNashorn    : path,
           main    : "two/script-two.js",
           apiName : "ScriptTwo",
     });
