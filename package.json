@@ -4,7 +4,7 @@
   "description": "collect require-js based codebase into a singel js file ",
   "main": "src/collect-require.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha test/e2e/module-test.js"
   },
   "repository": {
     "type": "git",
